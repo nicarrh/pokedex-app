@@ -2,7 +2,8 @@ import { getJson } from '@/shared';
 
 import type { PokemonRepository } from '../../../application/ports/pokemon-repository.port';
 import type { Pokemon, PokemonPage } from '../../../domain/pokemon.model';
-import { mapPokemon, mapPokemonPage } from '../mappers/poke-api.mapper';
+import { mapPokemon } from '../mappers/poke-api-detail.mapper';
+import { mapPokemonPage } from '../mappers/poke-api.mapper';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
 

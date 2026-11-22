@@ -1,4 +1,4 @@
-import type { Pokemon, PokemonPage, PokemonSummary } from '../../../domain/pokemon.model';
+import type { PokemonPage, PokemonSummary } from '../../../domain/pokemon.model';
 import type { PokeApiListDto } from '../dtos/poke-api.dto';
 import { artworkUrl } from './artwork';
 import { invalid, isRecord, readArray, readString } from './validation';
@@ -34,15 +34,3 @@ export function mapPokemonPage(raw: unknown): PokemonPage {
   });
   return { items, nextOffset: dto.next === null ? null : offsetFromUrl(dto.next) };
 }
-
-export const mapPokemon = (raw: unknown): Pokemon => {
-  if (!isRecord(raw) || !raw?.id || raw === undefined) {
-    return invalid('invalid or no content');
-  }
-  const { id } = raw;
-  if (typeof id !== 'number' || !Number.isInteger(id) || id <= 0) {
-    return invalid('invalid pokemon id');
-  }
-
-  return { id };
-};

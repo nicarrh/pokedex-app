@@ -24,3 +24,17 @@ export function readArray(source: Record<string, unknown>, key: string): unknown
   const value = source[key];
   return Array.isArray(value) ? value : invalid(`${key} must be an array`);
 }
+
+export function readBoolean(source: Record<string, unknown>, key: string): boolean {
+  const value = source[key];
+  return typeof value === 'boolean' ? value : invalid(`${key} must be a boolean`);
+}
+
+export function readNullableNumber(source: Record<string, unknown>, key: string): number | null {
+  return source[key] === null ? null : readNumber(source, key);
+}
+
+export function readRecord(source: Record<string, unknown>, key: string): Record<string, unknown> {
+  const value = source[key];
+  return isRecord(value) ? value : invalid(`${key} must be an object`);
+}
