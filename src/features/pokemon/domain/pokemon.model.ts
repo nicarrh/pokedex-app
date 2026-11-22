@@ -8,3 +8,7 @@ export interface PokemonPage {
   readonly items: readonly PokemonSummary[];
   readonly nextOffset: number | null;
 }
+
+export interface Pokemon {
+  readonly id: number;
+}
