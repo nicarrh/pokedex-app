@@ -1,22 +1,34 @@
 import { memo } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { colors, minTouchSize, spacing } from '@/shared';
 
 import type { PokemonSummary } from '../../domain/pokemon.model';
+import { useNavigation } from '@react-navigation/native';
 
 const capitalize = (name: string) => name.charAt(0).toUpperCase() + name.slice(1);
 
 function PokemonCardComponent({ pokemon }: { pokemon: PokemonSummary }) {
+  const navigation = useNavigation();
   const name = capitalize(pokemon.name);
+
+  const handleNavigateToDetailScreen = () => {
+    navigation.navigate('PokemonDetails', {
+      pokemonId: pokemon.id,
+      pokemonName: name,
+    });
+  };
+
   return (
-    <View style={styles.card} accessible accessibilityLabel={`${name}, número ${pokemon.id}`}>
-      <Image source={{ uri: pokemon.imageUrl }} style={styles.image} accessible={false} />
-      <View>
-        <Text style={styles.number}>#{String(pokemon.id).padStart(3, '0')}</Text>
-        <Text style={styles.name}>{name}</Text>
+    <TouchableOpacity onPress={handleNavigateToDetailScreen}>
+      <View style={styles.card} accessible accessibilityLabel={`${name}, número ${pokemon.id}`}>
+        <Image source={{ uri: pokemon.imageUrl }} style={styles.image} accessible={false} />
+        <View>
+          <Text style={styles.number}>#{String(pokemon.id).padStart(3, '0')}</Text>
+          <Text style={styles.name}>{name}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
