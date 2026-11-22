@@ -1,11 +1,13 @@
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
 
+import { getPokemonDetail } from '@/features/pokemon/application/use-cases/get-pokemon-detail';
 import { getPokemonList } from '@/features/pokemon/application/use-cases/get-pokemon-list';
-import type { PokemonPage } from '@/features/pokemon/domain/pokemon.model';
+import type { Pokemon, PokemonPage } from '@/features/pokemon/domain/pokemon.model';
 import { PokeApiRepository } from '@/features/pokemon/infrastructure/api/repositories/poke-api.repository';
 
 export interface Dependencies {
   getPokemonList: (offset: number, signal?: AbortSignal) => Promise<PokemonPage>;
+  getPokemonDetail: (id: number, signal?: AbortSignal) => Promise<Pokemon>;
 }
 
 const DependenciesContext = createContext<Dependencies | null>(null);
@@ -16,6 +18,7 @@ export function DependenciesProvider({ children }: { children: ReactNode }) {
     const pokemonRepository = new PokeApiRepository();
     return {
       getPokemonList: (offset, signal) => getPokemonList(pokemonRepository, offset, signal),
+      getPokemonDetail: (id, signal) => getPokemonDetail(pokemonRepository, id, signal),
     };
   }, []);
 
