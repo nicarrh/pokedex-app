@@ -20,8 +20,13 @@ function PokemonCardComponent({ pokemon }: { pokemon: PokemonSummary }) {
   };
 
   return (
-    <TouchableOpacity onPress={handleNavigateToDetailScreen}>
-      <View style={styles.card} accessible accessibilityLabel={`${name}, número ${pokemon.id}`}>
+    <TouchableOpacity
+      onPress={handleNavigateToDetailScreen}
+      accessibilityRole="button"
+      accessibilityLabel={`${name}, número ${pokemon.id}`}
+      accessibilityHint="Abre el detalle"
+    >
+      <View style={styles.card}>
         <Image source={{ uri: pokemon.imageUrl }} style={styles.image} accessible={false} />
         <View>
           <Text style={styles.number}>#{String(pokemon.id).padStart(3, '0')}</Text>
