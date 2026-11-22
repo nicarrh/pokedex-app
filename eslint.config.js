@@ -27,20 +27,27 @@ module.exports = defineConfig([
       'no-restricted-imports': [
         'error',
         {
-          patterns: ['react', 'react-native', 'expo-*', 'react-native-mmkv', '**/adapters/**'],
+          patterns: [
+            'react',
+            'react-native',
+            'expo-*',
+            'react-native-mmkv',
+            '**/infrastructure/**',
+            '**/presentation/**',
+          ],
         },
       ],
     },
   },
   {
-    files: ['src/features/*/adapters/ui/**'],
+    files: ['src/features/*/presentation/**'],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
-            '**/adapters/api/**',
-            '**/adapters/cache/**',
+            '**/infrastructure/api/**',
+            '**/infrastructure/cache/**',
             'react-native-mmkv',
             'expo-secure-store',
           ],
