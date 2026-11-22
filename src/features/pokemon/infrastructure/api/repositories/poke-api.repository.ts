@@ -1,7 +1,7 @@
 import { getJson } from '@/shared';
 
 import type { PokemonRepository } from '../../../application/ports/pokemon-repository.port';
-import type { PokemonPage } from '../../../domain/pokemon.model';
+import type { Pokemon, PokemonPage } from '../../../domain/pokemon.model';
 import { mapPokemon, mapPokemonPage } from '../mappers/poke-api.mapper';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
@@ -12,7 +12,7 @@ export class PokeApiRepository implements PokemonRepository {
     return mapPokemonPage(raw);
   }
 
-  async getById(id: number, signal?: AbortSignal): Promise<{ id: number }> {
+  async getById(id: number, signal?: AbortSignal): Promise<Pokemon> {
     const raw = await getJson(`${BASE_URL}/pokemon/${id}`, { signal });
     return mapPokemon(raw);
   }
