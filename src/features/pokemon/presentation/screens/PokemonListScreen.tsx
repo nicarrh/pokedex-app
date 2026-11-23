@@ -1,9 +1,10 @@
-import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { colors, ErrorState, OfflineBanner, spacing } from '@/shared';
 
 import { PokemonCard } from '../components/PokemonCard';
+import { PokemonListSkeleton } from '../components/PokemonListSkeleton';
 import { usePokemonList } from '../hooks/usePokemonList';
 
 export function PokemonListScreen() {
@@ -12,9 +13,9 @@ export function PokemonListScreen() {
 
   if (status === 'loading') {
     return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" accessibilityLabel="Cargando Pokémon" />
-      </View>
+      <SafeAreaView style={styles.screen}>
+        <PokemonListSkeleton />
+      </SafeAreaView>
     );
   }
 
@@ -50,7 +51,6 @@ export function PokemonListScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.background },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   list: { paddingVertical: spacing.md },
   empty: { textAlign: 'center', color: colors.textMuted, marginTop: spacing.lg },
   footer: { paddingVertical: spacing.md },
