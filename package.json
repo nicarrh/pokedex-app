@@ -39,5 +39,8 @@
     "test": "jest",
     "check": "npm run typecheck && npm run lint && npm test"
   },
-  "private": true
+  "private": true,
+  "engines": {
+    "node": ">=24"
+  }
 }
