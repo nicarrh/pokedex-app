@@ -9,6 +9,7 @@ export interface PokemonSummary {
 export interface PokemonPage {
   readonly items: readonly PokemonSummary[];
   readonly nextOffset: number | null;
+  readonly isOffline?: boolean;
 }
 
 export interface PokemonAbility {
@@ -32,4 +33,5 @@ export interface Pokemon {
   readonly heightM: number;
   // PokéAPI leaves it null for some forms.
   readonly baseExperience: number | null;
+  readonly isOffline?: boolean;
 }

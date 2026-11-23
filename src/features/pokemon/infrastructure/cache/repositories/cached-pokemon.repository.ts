@@ -45,12 +45,12 @@ export class CachedPokemonRepository implements PokemonRepository {
     );
   }
 
-  private async cached<T>(
+  private async cached<T extends object>(
     key: string,
     ttlMs: number,
     load: () => Promise<T>,
     signal?: AbortSignal,
-  ): Promise<T> {
+  ): Promise<T & { isOffline?: boolean }> {
     const entry = this.read<T>(key);
     if (entry && Date.now() - entry.savedAt < ttlMs) return entry.data;
 
@@ -60,7 +60,7 @@ export class CachedPokemonRepository implements PokemonRepository {
       return data;
     } catch (error) {
       if (signal?.aborted || !entry) throw error;
-      return entry.data;
+      return { ...entry.data, isOffline: true };
     }
   }
 
