@@ -3,6 +3,7 @@ import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 're
 
 import { capitalize, colors, ErrorState, formatPokemonNumber, spacing } from '@/shared';
 
+import { TypeBadge } from '../components/TypeBadge';
 import { usePokemonDetail } from '../hooks/usePokemonDetail';
 
 type Props = StaticScreenProps<{ pokemonId: number; pokemonName: string }>;
@@ -33,6 +34,11 @@ export const PokemonDetailsScreen = ({ route }: Props) => {
       <Text style={styles.name} accessibilityRole="header">
         {name}
       </Text>
+      <View style={styles.types}>
+        {pokemon.types.map(type => (
+          <TypeBadge key={type} type={type} />
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -42,5 +48,6 @@ const styles = StyleSheet.create({
   content: { alignItems: 'center', padding: spacing.md },
   image: { width: 240, height: 240 },
   number: { fontSize: 14, color: colors.textMuted, marginTop: spacing.sm },
+  types: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
   name: { fontSize: 28, fontWeight: '700', color: colors.text },
 });
