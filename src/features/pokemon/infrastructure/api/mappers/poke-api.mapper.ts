@@ -1,28 +1,15 @@
-import { AppError } from '@/shared';
-
 import type { PokemonPage, PokemonSummary } from '../../../domain/pokemon.model';
 import type { PokeApiListDto } from '../dtos/poke-api.dto';
-
-const ARTWORK_URL =
-  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork';
-
-function invalid(reason: string): never {
-  throw new AppError('invalid-data', reason);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
+import { artworkUrl } from './artwork';
+import { invalid, isRecord, readArray, readString } from './validation';
 
 function parseList(raw: unknown): PokeApiListDto {
-  if (!isRecord(raw) || !Array.isArray(raw.results)) return invalid('missing results');
+  if (!isRecord(raw)) return invalid('response must be an object');
   const next = raw.next;
-  if (next !== null && typeof next !== 'string') return invalid('invalid next');
-  const results = raw.results.map((entry: unknown) => {
-    if (!isRecord(entry) || typeof entry.name !== 'string' || typeof entry.url !== 'string') {
-      return invalid('invalid result entry');
-    }
-    return { name: entry.name, url: entry.url };
+  if (next !== null && typeof next !== 'string') return invalid('next must be a string or null');
+  const results = readArray(raw, 'results').map(entry => {
+    if (!isRecord(entry)) return invalid('result entry must be an object');
+    return { name: readString(entry, 'name'), url: readString(entry, 'url') };
   });
   return { next, results };
 }
@@ -43,7 +30,7 @@ export function mapPokemonPage(raw: unknown): PokemonPage {
   const dto = parseList(raw);
   const items: PokemonSummary[] = dto.results.map(({ name, url }) => {
     const id = idFromUrl(url);
-    return { id, name, imageUrl: `${ARTWORK_URL}/${id}.png` };
+    return { id, name, imageUrl: artworkUrl(id) };
   });
   return { items, nextOffset: dto.next === null ? null : offsetFromUrl(dto.next) };
 }
