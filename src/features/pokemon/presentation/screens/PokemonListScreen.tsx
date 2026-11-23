@@ -1,13 +1,13 @@
 import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { colors, ErrorState, spacing } from '@/shared';
+import { colors, ErrorState, OfflineBanner, spacing } from '@/shared';
 
 import { PokemonCard } from '../components/PokemonCard';
 import { usePokemonList } from '../hooks/usePokemonList';
 
 export function PokemonListScreen() {
-  const { status, items, error, loadingMore, refreshing, loadMore, refresh, retry } =
+  const { status, items, error, isOffline, loadingMore, refreshing, loadMore, refresh, retry } =
     usePokemonList();
 
   if (status === 'loading') {
@@ -32,6 +32,7 @@ export function PokemonListScreen() {
 
   return (
     <SafeAreaView style={styles.screen}>
+      {isOffline ? <OfflineBanner /> : null}
       <FlatList
         data={items}
         keyExtractor={item => String(item.id)}

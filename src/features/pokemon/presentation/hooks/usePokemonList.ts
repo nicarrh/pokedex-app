@@ -14,6 +14,7 @@ export function usePokemonList() {
   const [error, setError] = useState<UserMessage | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [isOffline, setIsOffline] = useState(false);
   // Bumping it re-runs the initial load (used by retry).
   const [attempt, setAttempt] = useState(0);
 
@@ -24,6 +25,7 @@ export function usePokemonList() {
   const showPage = useCallback((page: PokemonPage, append: boolean) => {
     nextOffset.current = page.nextOffset;
     setItems(prev => (append ? [...prev, ...page.items] : page.items));
+    setIsOffline(prev => page.isOffline === true || (append && prev));
     setStatus(append || page.items.length > 0 ? 'ready' : 'empty');
     setError(null);
   }, []);
@@ -79,5 +81,5 @@ export function usePokemonList() {
     setAttempt(n => n + 1);
   }, []);
 
-  return { status, items, error, loadingMore, refreshing, loadMore, refresh, retry };
+  return { status, items, error, isOffline, loadingMore, refreshing, loadMore, refresh, retry };
 }

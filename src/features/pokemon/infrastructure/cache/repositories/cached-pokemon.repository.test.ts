@@ -91,7 +91,25 @@ describe('CachedPokemonRepository', () => {
     now += 8 * 24 * HOUR;
     source.getById.mockRejectedValue(new AppError('network'));
 
-    await expect(repo.getById(1)).resolves.toEqual(pokemon);
+    await expect(repo.getById(1)).resolves.toEqual({ ...pokemon, isOffline: true });
+  });
+
+  it('does not persist the offline flag', async () => {
+    const { source, storage, repo } = setup();
+    await repo.getById(1);
+
+    now += 8 * 24 * HOUR;
+    source.getById.mockRejectedValue(new AppError('network'));
+    await repo.getById(1);
+
+    expect(storage.get('pokemon:detail:1')).toEqual({ data: pokemon, savedAt: 1_700_000_000_000 });
+  });
+
+  it('does not flag results that come from the source or a fresh entry', async () => {
+    const { repo } = setup();
+
+    expect((await repo.getPage(0, 20)).isOffline).toBeUndefined();
+    expect((await repo.getPage(0, 20)).isOffline).toBeUndefined();
   });
 
   it('rethrows the error when there is no cached entry', async () => {
