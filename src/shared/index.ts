@@ -7,5 +7,6 @@ export { MemoryStorage } from './storage/memory-storage';
 export { openMmkvStorage } from './storage/mmkv-storage';
 export { ErrorState } from './ui/ErrorState';
 export { OfflineBanner } from './ui/OfflineBanner';
+export { Skeleton } from './ui/Skeleton';
 export { colors, minTouchSize, spacing } from './ui/theme';
 export { capitalize, formatPokemonNumber } from './utils/format';
