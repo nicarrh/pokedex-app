@@ -1,7 +1,14 @@
 import { StaticScreenProps } from '@react-navigation/native';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { capitalize, colors, ErrorState, formatPokemonNumber, spacing } from '@/shared';
+import {
+  capitalize,
+  colors,
+  ErrorState,
+  formatPokemonNumber,
+  OfflineBanner,
+  spacing,
+} from '@/shared';
 
 import type { PokemonAbility } from '../../domain/pokemon.model';
 import { InfoRow } from '../components/InfoRow';
@@ -39,51 +46,55 @@ export const PokemonDetailsScreen = ({ route }: Props) => {
   const heroColor = pokemon.types[0] ? typeStyles[pokemon.types[0]].color : colors.primary;
 
   return (
-    <ScrollView contentContainerStyle={styles.content}>
-      <View style={[styles.hero, { backgroundColor: heroColor }]}>
-        <Image source={{ uri: pokemon.imageUrl }} style={styles.image} accessible={false} />
-      </View>
-      <View
-        style={styles.header}
-        accessible
-        accessibilityRole="header"
-        accessibilityLabel={`${name}, número ${pokemon.id}, tipo ${typeNames}`}
-      >
-        <Text style={styles.number}>{formatPokemonNumber(pokemon.id)}</Text>
-        <Text style={styles.name}>{name}</Text>
-        <View style={styles.types}>
-          {pokemon.types.map(type => (
-            <TypeBadge key={type} type={type} />
-          ))}
+    <View style={styles.screen}>
+      {pokemon.isOffline ? <OfflineBanner /> : null}
+      <ScrollView contentContainerStyle={styles.content}>
+        <View style={[styles.hero, { backgroundColor: heroColor }]}>
+          <Image source={{ uri: pokemon.imageUrl }} style={styles.image} accessible={false} />
         </View>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle} accessibilityRole="header">
-          Datos
-        </Text>
-        <InfoRow label="Peso" value={`${formatDecimal(pokemon.weightKg)} kg`} />
-        <InfoRow label="Altura" value={`${formatDecimal(pokemon.heightM)} m`} />
-        <InfoRow
-          label="Habilidades"
-          value={pokemon.abilities.map(ability => formatAbility(ability)).join(', ')}
-        />
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle} accessibilityRole="header">
-          Estadísticas
-        </Text>
-        {pokemon.stats.map(stat => (
-          <StatBar key={stat.name} name={stat.name} value={stat.value} />
-        ))}
-        {pokemon.baseExperience !== null ? (
-          <Text style={styles.experience}>Experiencia base: {pokemon.baseExperience}</Text>
-        ) : null}
-      </View>
-    </ScrollView>
+        <View
+          style={styles.header}
+          accessible
+          accessibilityRole="header"
+          accessibilityLabel={`${name}, número ${pokemon.id}, tipo ${typeNames}`}
+        >
+          <Text style={styles.number}>{formatPokemonNumber(pokemon.id)}</Text>
+          <Text style={styles.name}>{name}</Text>
+          <View style={styles.types}>
+            {pokemon.types.map(type => (
+              <TypeBadge key={type} type={type} />
+            ))}
+          </View>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle} accessibilityRole="header">
+            Datos
+          </Text>
+          <InfoRow label="Peso" value={`${formatDecimal(pokemon.weightKg)} kg`} />
+          <InfoRow label="Altura" value={`${formatDecimal(pokemon.heightM)} m`} />
+          <InfoRow
+            label="Habilidades"
+            value={pokemon.abilities.map(ability => formatAbility(ability)).join(', ')}
+          />
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle} accessibilityRole="header">
+            Estadísticas
+          </Text>
+          {pokemon.stats.map(stat => (
+            <StatBar key={stat.name} name={stat.name} value={stat.value} />
+          ))}
+          {pokemon.baseExperience !== null ? (
+            <Text style={styles.experience}>Experiencia base: {pokemon.baseExperience}</Text>
+          ) : null}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  screen: { flex: 1 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   content: { paddingBottom: spacing.lg },
   hero: {
