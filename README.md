@@ -2,6 +2,13 @@
 
 App móvil hecha con React Native, Expo y TypeScript. Muestra la lista de Pokémon de [PokéAPI](https://pokeapi.co) y el detalle de cada uno: tipos, estadísticas, habilidades, peso y altura. Guarda los datos en el teléfono para poder verlos sin internet.
 
+## Capturas
+
+<p>
+  <img src="docs/screenshots/list-ios.png" alt="Lista de Pokémon en iOS" width="300" />
+  <img src="docs/screenshots/detail-ios.png" alt="Detalle de Bulbasaur en iOS" width="300" />
+</p>
+
 ## Requisitos
 
 - Node 24 (la versión está en `.nvmrc`: `nvm use`)
