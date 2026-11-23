@@ -1,12 +1,10 @@
 import { memo } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { colors, minTouchSize, spacing } from '@/shared';
+import { capitalize, colors, formatPokemonNumber, minTouchSize, spacing } from '@/shared';
 
 import type { PokemonSummary } from '../../domain/pokemon.model';
 import { useNavigation } from '@react-navigation/native';
-
-const capitalize = (name: string) => name.charAt(0).toUpperCase() + name.slice(1);
 
 function PokemonCardComponent({ pokemon }: { pokemon: PokemonSummary }) {
   const navigation = useNavigation();
@@ -29,7 +27,7 @@ function PokemonCardComponent({ pokemon }: { pokemon: PokemonSummary }) {
       <View style={styles.card}>
         <Image source={{ uri: pokemon.imageUrl }} style={styles.image} accessible={false} />
         <View>
-          <Text style={styles.number}>#{String(pokemon.id).padStart(3, '0')}</Text>
+          <Text style={styles.number}>{formatPokemonNumber(pokemon.id)}</Text>
           <Text style={styles.name}>{name}</Text>
         </View>
       </View>

@@ -1,11 +1,16 @@
 import { PokemonDetailsScreen, PokemonListScreen } from '@/features/pokemon';
 import { createStaticNavigation, StaticParamList } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+  createNativeStackNavigator,
+  createNativeStackScreen,
+} from '@react-navigation/native-stack';
 
 type RootStackParamList = StaticParamList<typeof RootStack>;
 
 declare global {
   namespace ReactNavigation {
+    // Declaration merging requires an interface; React Navigation reads the route types from it.
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface RootParamList extends RootStackParamList {}
   }
 }
@@ -18,13 +23,13 @@ const RootStack = createNativeStackNavigator({
         headerShown: false,
       },
     },
-    PokemonDetails: {
+    PokemonDetails: createNativeStackScreen({
       screen: PokemonDetailsScreen,
-      options: {
-        headerTitle: () => '',
+      options: ({ route }) => ({
+        title: route.params.pokemonName,
         headerBackButtonDisplayMode: 'minimal',
-      },
-    },
+      }),
+    }),
   },
 });
 
