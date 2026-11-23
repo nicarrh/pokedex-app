@@ -3,11 +3,18 @@ import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 're
 
 import { capitalize, colors, ErrorState, formatPokemonNumber, spacing } from '@/shared';
 
+import type { PokemonAbility } from '../../domain/pokemon.model';
+import { InfoRow } from '../components/InfoRow';
 import { StatBar } from '../components/StatBar';
 import { TypeBadge } from '../components/TypeBadge';
 import { usePokemonDetail } from '../hooks/usePokemonDetail';
 
 type Props = StaticScreenProps<{ pokemonId: number; pokemonName: string }>;
+
+const formatDecimal = (value: number) => String(value).replace('.', ',');
+
+const formatAbility = ({ name, isHidden }: PokemonAbility) =>
+  `${capitalize(name.replace(/-/g, ' '))}${isHidden ? ' (oculta)' : ''}`;
 
 export const PokemonDetailsScreen = ({ route }: Props) => {
   const { pokemonId } = route.params;
@@ -39,6 +46,17 @@ export const PokemonDetailsScreen = ({ route }: Props) => {
         {pokemon.types.map(type => (
           <TypeBadge key={type} type={type} />
         ))}
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle} accessibilityRole="header">
+          Datos
+        </Text>
+        <InfoRow label="Peso" value={`${formatDecimal(pokemon.weightKg)} kg`} />
+        <InfoRow label="Altura" value={`${formatDecimal(pokemon.heightM)} m`} />
+        <InfoRow
+          label="Habilidades"
+          value={pokemon.abilities.map(ability => formatAbility(ability)).join(', ')}
+        />
       </View>
       <View style={styles.section}>
         <Text style={styles.sectionTitle} accessibilityRole="header">
