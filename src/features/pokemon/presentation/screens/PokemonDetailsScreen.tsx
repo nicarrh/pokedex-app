@@ -8,6 +8,7 @@ import { InfoRow } from '../components/InfoRow';
 import { StatBar } from '../components/StatBar';
 import { TypeBadge } from '../components/TypeBadge';
 import { usePokemonDetail } from '../hooks/usePokemonDetail';
+import { typeStyles } from '../type-styles';
 
 type Props = StaticScreenProps<{ pokemonId: number; pokemonName: string }>;
 
@@ -34,18 +35,27 @@ export const PokemonDetailsScreen = ({ route }: Props) => {
 
   const { pokemon } = state;
   const name = capitalize(pokemon.name);
+  const typeNames = pokemon.types.map(type => typeStyles[type].label.toLowerCase()).join(' y ');
+  const heroColor = pokemon.types[0] ? typeStyles[pokemon.types[0]].color : colors.primary;
 
   return (
     <ScrollView contentContainerStyle={styles.content}>
-      <Image source={{ uri: pokemon.imageUrl }} style={styles.image} accessible={false} />
-      <Text style={styles.number}>{formatPokemonNumber(pokemon.id)}</Text>
-      <Text style={styles.name} accessibilityRole="header">
-        {name}
-      </Text>
-      <View style={styles.types}>
-        {pokemon.types.map(type => (
-          <TypeBadge key={type} type={type} />
-        ))}
+      <View style={[styles.hero, { backgroundColor: heroColor }]}>
+        <Image source={{ uri: pokemon.imageUrl }} style={styles.image} accessible={false} />
+      </View>
+      <View
+        style={styles.header}
+        accessible
+        accessibilityRole="header"
+        accessibilityLabel={`${name}, número ${pokemon.id}, tipo ${typeNames}`}
+      >
+        <Text style={styles.number}>{formatPokemonNumber(pokemon.id)}</Text>
+        <Text style={styles.name}>{name}</Text>
+        <View style={styles.types}>
+          {pokemon.types.map(type => (
+            <TypeBadge key={type} type={type} />
+          ))}
+        </View>
       </View>
       <View style={styles.section}>
         <Text style={styles.sectionTitle} accessibilityRole="header">
@@ -75,11 +85,18 @@ export const PokemonDetailsScreen = ({ route }: Props) => {
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  content: { alignItems: 'center', padding: spacing.md },
+  content: { paddingBottom: spacing.lg },
+  hero: {
+    alignItems: 'center',
+    paddingVertical: spacing.lg,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
+  },
   image: { width: 240, height: 240 },
+  header: { alignItems: 'center', marginTop: spacing.md },
   number: { fontSize: 14, color: colors.textMuted, marginTop: spacing.sm },
   types: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
-  section: { alignSelf: 'stretch', marginTop: spacing.lg, gap: spacing.xs },
+  section: { marginTop: spacing.lg, marginHorizontal: spacing.md, gap: spacing.xs },
   sectionTitle: { fontSize: 18, fontWeight: '600', color: colors.text, marginBottom: spacing.sm },
   experience: { fontSize: 14, color: colors.textMuted, marginTop: spacing.sm },
   name: { fontSize: 28, fontWeight: '700', color: colors.text },
