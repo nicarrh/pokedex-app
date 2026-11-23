@@ -3,6 +3,7 @@ import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 're
 
 import { capitalize, colors, ErrorState, formatPokemonNumber, spacing } from '@/shared';
 
+import { StatBar } from '../components/StatBar';
 import { TypeBadge } from '../components/TypeBadge';
 import { usePokemonDetail } from '../hooks/usePokemonDetail';
 
@@ -39,6 +40,17 @@ export const PokemonDetailsScreen = ({ route }: Props) => {
           <TypeBadge key={type} type={type} />
         ))}
       </View>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle} accessibilityRole="header">
+          Estadísticas
+        </Text>
+        {pokemon.stats.map(stat => (
+          <StatBar key={stat.name} name={stat.name} value={stat.value} />
+        ))}
+        {pokemon.baseExperience !== null ? (
+          <Text style={styles.experience}>Experiencia base: {pokemon.baseExperience}</Text>
+        ) : null}
+      </View>
     </ScrollView>
   );
 };
@@ -49,5 +61,8 @@ const styles = StyleSheet.create({
   image: { width: 240, height: 240 },
   number: { fontSize: 14, color: colors.textMuted, marginTop: spacing.sm },
   types: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
+  section: { alignSelf: 'stretch', marginTop: spacing.lg, gap: spacing.xs },
+  sectionTitle: { fontSize: 18, fontWeight: '600', color: colors.text, marginBottom: spacing.sm },
+  experience: { fontSize: 14, color: colors.textMuted, marginTop: spacing.sm },
   name: { fontSize: 28, fontWeight: '700', color: colors.text },
 });
